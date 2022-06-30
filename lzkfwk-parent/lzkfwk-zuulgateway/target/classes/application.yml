@@ -1,0 +1,41 @@
+#eureka server服务端口
+server:
+  port: 8432
+spring:
+  application:
+    name: lzkfwk-gateway # 应用名称，应用名称会在Eureka中作为服务名称
+
+  cloud:
+    #inetutils:
+      # 指定此客户端的ip
+      #default-ip-address: springcloud
+      #getway配置
+
+      ##### 动态路由设置时，uri以 lb: //开头（lb代表从注册中⼼获取服务），后⾯是需要转发到的服务名称
+    gateway:
+      routes: # 路由可以有多个
+        - id: lzkfwk-gateway-router # 我们⾃定义的路由 ID，保持唯⼀
+          #uri: https://www.baidu.com/ # ⽬标服务地址 部署多实例） 动态路由：uri配置的应该是⼀个服务名称，⽽不应该是⼀个具体的服务实例的地址
+
+          uri: lb://lzkfwt-webservice # ⽬标服务地址 部署多实例） 动态路由：uri配置的应该是⼀个服务名称，⽽不应该是⼀个具体的服务实例的地址
+          # gateway⽹关从服务注册中⼼获取实例信息然后负载后路由
+
+          predicates: #断⾔：路由条件，Predicate 接受⼀个输⼊参数，返回⼀个布尔值结果。该接⼝包含多种默 认⽅法来将 Predicate 组合成其他复杂的逻辑（⽐如：与，或，⾮）。
+            - Path=/test/**
+            #- Query=webservice
+            
+            
+        #- id: service-router2 # 我们⾃定义的路由 ID，保持唯⼀
+          #uri: lb://cloud-eureka-client-8081 #服务名不要用下划线
+          #predicates: #断⾔：路由条件，Predicate 接受⼀个输⼊参数，返回⼀个布尔值结果。该接⼝包含多种默 认⽅法来将 Predicate 组合成其他复杂的逻辑（⽐如：与，或，⾮）。
+            #- Path=/api2/**
+          #filters:
+            #- StripPrefix=1 #可以去掉url中的占位后转发路由 可以去掉api后转发
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8300/eureka/
+
+
